@@ -1,0 +1,17 @@
+body{
+  background-color: hsl(0, 0%, 15%);
+  color: white;
+}
+
+#top-header{
+  display: flex;
+  justify-content: space-between;
+}
+
+#personal-best{
+  display: flex;
+  gap: 6px;
+}
+
+
+
