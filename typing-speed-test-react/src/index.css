@@ -1,5 +1,5 @@
 body{
-  background-color: hsl(0, 0%, 15%);
+  background-color: hsl(0, 3%, 12%);
   color: white;
 }
 
@@ -13,5 +13,46 @@ body{
   gap: 6px;
 }
 
+#game-info{
+  display: flex;
+  justify-content: space-between;
+}
 
+#header-bottom-left{
+  display: flex;
+  gap: 50px;
+}
 
+#header-bottom-right{
+  display: flex;
+}
+
+button{
+  height: fit-content;
+  width: fit-content;
+  padding: 7px;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin-top: 7px;
+  margin-left: 5px;
+  background-color: hsl(0, 3%, 12%);
+  color: white;
+  text-align: center;
+}
+
+button:hover{
+  height: fit-content;
+  width: fit-content;
+  padding: 7px;
+  border: 2px solid rgb(97, 150, 211);
+  border-radius: 5px;
+  margin-top: 7px;
+  margin-left: 5px;
+  background-color: hsl(0, 3%, 12%);
+  color: rgb(97, 150, 211);
+  text-align: center;
+
+}
+#mode{
+  margin-left: 25px;
+}

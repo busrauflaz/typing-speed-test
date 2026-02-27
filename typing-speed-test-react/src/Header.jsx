@@ -2,21 +2,25 @@ function Header(){
 
     return(
         <>
-          <section id="top-header">
-                <img src="src/images/logo-large.svg" />
-                <div id="personal-best">
-                    <img src="src/images/icon-personal-best.svg" />
-                    <h3>Personal Best: </h3>
-                </div>
-          </section>
+          
 
           <section id="game-info">
             <div id="header-bottom-left">
+              <p>VPM:</p>
+              <p>Accuracy:</p>
+              <p>Time:</p>
 
             </div>
 
             <div id="header-bottom-right">
-                
+                <p>Difficulty:</p>
+                <button>Easy</button>
+                <button>Medium</button>
+                <button>Hard</button>
+
+                <p id="mode">Mode:</p>
+                <button>Timed(60s)</button>
+                <button>Passage</button>
             </div>
           </section>
         </>
