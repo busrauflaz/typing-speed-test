@@ -1,4 +1,4 @@
-function Header(){
+function Header(props){
 
     return(
         <>
@@ -12,13 +12,13 @@ function Header(){
 
             <div id="header-bottom-right">
                 <p>Difficulty:</p>
-                <button onClick>Easy</button>
-                <button>Medium</button>
-                <button>Hard</button>
+                <button onClick={props.is_Easy()}>Easy</button>
+                <button onClick={props.is_Medium()}>Medium</button>
+                <button onClick={props.is_Hard()}>Hard</button>
 
                 <p id="mode">Mode:</p>
-                <button>Timed(60s)</button>
-                <button>Passage</button>
+                <button >Timed(60s)</button>
+                <button >Passage</button>
             </div>
           </section>
         </>
