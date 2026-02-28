@@ -1,11 +1,23 @@
+*{
+  box-sizing: border-box;
+}
+
 body{
   background-color: hsl(0, 3%, 12%);
   color: white;
+  margin: 0;
+}
+
+header{
+  box-shadow: 4px 4px 3px 0px rgba(135, 143, 139, 0.1);
+  height: 140px;
+  padding: 20px;
 }
 
 #top-header{
   display: flex;
   justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 #personal-best{
@@ -16,6 +28,7 @@ body{
 #game-info{
   display: flex;
   justify-content: space-between;
+  margin-bottom: 30px;
 }
 
 #header-bottom-left{

@@ -2,8 +2,6 @@ function Header(){
 
     return(
         <>
-          
-
           <section id="game-info">
             <div id="header-bottom-left">
               <p>VPM:</p>
@@ -14,7 +12,7 @@ function Header(){
 
             <div id="header-bottom-right">
                 <p>Difficulty:</p>
-                <button>Easy</button>
+                <button onClick>Easy</button>
                 <button>Medium</button>
                 <button>Hard</button>
 
