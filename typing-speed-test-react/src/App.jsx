@@ -3,50 +3,46 @@ import Header from "./Header.jsx"
 import data from "./data.json"
 
 function App(){
-  let isEasy = false
-  let isMedium = false
-  let isHard = false
+  const [difficulty, setDifficulty] = React.useState("")
 
-  const [text, setText] = React.useState(() => getRandomText())
+  const [text, setText] = React.useState([])
 
   function getRandomText(){
-     let random_text = Math.floor(Math.random() * 10)
-     if (isEasy){
-      return data.easy[random_text].text
+     let index = Math.floor(Math.random() * 10)
+     let random_text = []
+
+     {difficulty == "easy" && (
+      random_text =  data.easy[index].text.split(""))
      }
-     if (isHard){
-      return data.hard[random_text].text
+     { difficulty == "medium" && (
+      random_text =  data.hard[index].text.split(""))
      }
-     if (isMedium){
-      return data.medium[random_text].text
+     { difficulty == "hard" && (
+      random_text = data.medium[index].text.split(""))
      }
 
+     return random_text
   }
 
-  function is_Easy(){
-    isEasy = true
-    isMedium = false
-    isHard = false
-  }
+  React.useEffect(() => {
+    setText(getRandomText(difficulty))
+    
+  }, [difficulty])
 
-  function is_Medium(){
-    isEasy = false
-    isMedium = true
-    isHard = false
-  }
+  React.useEffect(() => {
+    function handleKeyDown(){
+      console.log("you pressed!")
+    }
 
-  function is_Hard(){
-    isEasy = false
-    isMedium = false
-    isHard = true
-  }
+    document.addEventListener("keydown", handleKeyDown)
 
-  document.addEventListener("keydown", function(event){
-    console.log("you pressed!")
+    return () =>{
+      document.removeEventListener("keydown", handleKeyDown)
+    }
 
-  })
+  }, [])
 
-  console.log(text)
+ console.log(text)
 
   return(
     <>
@@ -61,25 +57,15 @@ function App(){
          </section>
 
          <Header 
-         is_Easy = {is_Easy}
-         is_Medium = {is_Medium}
-         is_Hard = {is_Hard}
+         setDifficulty = {setDifficulty}
          />
       </header>
-
-      
 
       <p>{text}</p>
 
       
-
-
-
     </>
   )
-
-  
-
 }
 
 export default App
