@@ -48,12 +48,14 @@ function App(){
   }, [])
 
   const textElements = text.map((letter, index) => <span key={index} 
-    className={clsx(
-      pressedKey[index] == letter ? "correct" : "wrong"
+    className={clsx("first",
+      index+1 <= pressedKey.length && pressedKey[index]==letter && "correct",
+      index+1 <= pressedKey.length && pressedKey[index]!=letter  && "wrong"
+      //  (index+1 == pressedKey.length )&&  
+      //  pressedKey[index] == letter ? "correct" : "wrong"
     )}>{letter}</span>
   )
   
-
  console.log(text)
 
   return(
