@@ -67,6 +67,7 @@ button:hover{
   text-align: center;
 
 }
+
 #mode{
   margin-left: 25px;
 }
@@ -75,4 +76,26 @@ button:hover{
   padding: 20px;
   font-size: 2em;
   margin-left: 10px;
+}
+
+.correct{
+  padding: 20px;
+  font-size: 2em;
+  margin-left: 10px;
+  color: green
+}
+
+.wrong{
+  padding: 20px;
+  font-size: 2em;
+  margin-left: 10px;
+  color: red;
+  text-decoration: underline;
+}
+
+.text span {
+  display: inline;       /* behave like normal text */
+  margin: 0;             /* remove extra spacing */
+  padding: 0;            /* remove padding */
+  letter-spacing: normal; /* ensure default spacing */
 }

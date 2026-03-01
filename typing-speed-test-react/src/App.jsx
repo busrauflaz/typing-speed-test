@@ -1,6 +1,7 @@
 import React from "react"
 import Header from "./Header.jsx"
 import data from "./data.json"
+import clsx from "clsx"
 
 function App(){
   const [difficulty, setDifficulty] = React.useState("")
@@ -46,6 +47,13 @@ function App(){
 
   }, [])
 
+  const textElements = text.map((letter, index) => <span key={index} 
+    className={clsx(
+      pressedKey[index] == letter ? "correct" : "wrong"
+    )}>{letter}</span>
+  )
+  
+
  console.log(text)
 
   return(
@@ -65,8 +73,10 @@ function App(){
          />
       </header>
 
-      <p className="text">{text}</p>
-
+      <div className="text">
+        {textElements}
+      </div>
+      
       
     </>
   )
