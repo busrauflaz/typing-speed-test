@@ -29,6 +29,7 @@ function App(){
 
   React.useEffect(() => {
     setText(getRandomText(difficulty))
+    setPressedKey([])
     
   }, [difficulty])
 
