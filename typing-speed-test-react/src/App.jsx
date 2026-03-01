@@ -7,6 +7,8 @@ function App(){
 
   const [text, setText] = React.useState([])
 
+  const [pressedKey, setPressedKey] = React.useState([])
+
   function getRandomText(){
      let index = Math.floor(Math.random() * 10)
      let random_text = []
@@ -15,10 +17,10 @@ function App(){
       random_text =  data.easy[index].text.split(""))
      }
      { difficulty == "medium" && (
-      random_text =  data.hard[index].text.split(""))
+      random_text =  data.medium[index].text.split(""))
      }
      { difficulty == "hard" && (
-      random_text = data.medium[index].text.split(""))
+      random_text = data.hard[index].text.split(""))
      }
 
      return random_text
@@ -30,8 +32,10 @@ function App(){
   }, [difficulty])
 
   React.useEffect(() => {
-    function handleKeyDown(){
-      console.log("you pressed!")
+    function handleKeyDown(event){
+      console.log("you pressed!", event.key)
+
+      setPressedKey(prevKey => [...prevKey, event.key])
     }
 
     document.addEventListener("keydown", handleKeyDown)
@@ -61,7 +65,7 @@ function App(){
          />
       </header>
 
-      <p>{text}</p>
+      <p className="text">{text}</p>
 
       
     </>

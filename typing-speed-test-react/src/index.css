@@ -1,5 +1,6 @@
 *{
   box-sizing: border-box;
+  font-family: Open Sans;
 }
 
 body{
@@ -68,4 +69,10 @@ button:hover{
 }
 #mode{
   margin-left: 25px;
+}
+
+.text{
+  padding: 20px;
+  font-size: 2em;
+  margin-left: 10px;
 }
