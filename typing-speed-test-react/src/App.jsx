@@ -10,6 +10,8 @@ function App(){
 
   const [pressedKey, setPressedKey] = React.useState([])
 
+  const [timeLeft, setTimeLeft] = React.useState(60)
+
   function getRandomText(){
      let index = Math.floor(Math.random() * 10)
      let random_text = []
@@ -26,6 +28,18 @@ function App(){
 
      return random_text
   }
+  
+
+  React.useEffect(() => {
+    if (timeLeft === 0) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
 
   React.useEffect(() => {
     setText(getRandomText(difficulty))
@@ -73,6 +87,7 @@ function App(){
 
          <Header 
          setDifficulty = {setDifficulty}
+         timeLeft={timeLeft}
          />
       </header>
 

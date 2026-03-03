@@ -6,7 +6,7 @@ function Header(props){
             <div id="header-bottom-left">
               <p>VPM:</p>
               <p>Accuracy:</p>
-              <p>Time:</p>
+              <p>Time: {props.timeLeft}</p>
 
             </div>
 
