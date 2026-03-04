@@ -54,7 +54,7 @@ button{
   text-align: center;
 }
 
-button:hover{
+#header-btn:hover{
   height: fit-content;
   width: fit-content;
   padding: 7px;
@@ -97,4 +97,39 @@ button:hover{
   padding: 20px;
   margin-left: 10px;
   font-size: 1.25em;
+}
+
+
+.start-btn { 
+  padding: 16px 32px; 
+  font-size: 20px; 
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  border-radius: 8px; 
+ cursor: pointer;
+}
+
+#button{
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  margin-top: 250px;
+}
+
+#error{
+  text-align: center;
+}
+
+#header-btn.active{
+  height: fit-content;
+  width: fit-content;
+  padding: 7px;
+  border: 2px solid rgb(97, 150, 211);
+  border-radius: 5px;
+  margin-top: 7px;
+  margin-left: 5px;
+  background-color: hsl(0, 3%, 12%);
+  color: rgb(97, 150, 211);
+  text-align: center;
 }

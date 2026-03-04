@@ -12,6 +12,8 @@ function First_Test(){
             <p>Characters: </p>
 
            </div>
+
+           <button>Reset this score</button>
         </>
     )
 

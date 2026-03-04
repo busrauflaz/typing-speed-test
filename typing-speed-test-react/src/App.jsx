@@ -2,6 +2,7 @@ import React from "react"
 import Header from "./Header.jsx"
 import data from "./data.json"
 import clsx from "clsx"
+import { useStopwatch, useTimer } from "react-timer-hook"
 
 function App(){
   const [difficulty, setDifficulty] = React.useState("")
@@ -10,7 +11,25 @@ function App(){
 
   const [pressedKey, setPressedKey] = React.useState([])
 
-  const [timeLeft, setTimeLeft] = React.useState(60)
+  const [mode, setMode] = React.useState("")
+
+  const expiryTimestamp = new Date(); expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60)
+
+  const [showButton, setShowButton] = React.useState(true)
+
+  const [errorMessage, setErrorMessage] = React.useState("")
+
+  let isGameStarted = false
+
+  const { seconds, minutes, hours, isRunning, 
+    start, pause, resume, restart, } = 
+    useTimer({ expiryTimestamp, autoStart: false, onExpire: () => 
+      console.log("Countdown finished!"), })
+  
+      const { seconds: swSeconds, minutes: swMinutes, 
+        hours: swHours, isRunning: swRunning, start: swStart, 
+        pause: swPause, reset: swReset, } = 
+        useStopwatch({ autoStart: false });
 
   function getRandomText(){
      let index = Math.floor(Math.random() * 10)
@@ -29,17 +48,30 @@ function App(){
      return random_text
   }
   
+  function startGame(){
+    if(difficulty!="" && mode!=""){
+      setShowButton(false)
+      isGameStarted = true
+      setErrorMessage("")
 
-  React.useEffect(() => {
-    if (timeLeft === 0) return;
-
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timeLeft]);
-
+      if(mode=="countdown"){
+        start()
+      }
+      if(mode=="stopwatch"){
+        swStart()
+      }
+    }
+    if (difficulty=="" && mode==""){
+      setErrorMessage("Please choose a difficulty level and a game mode")
+    }
+    if (difficulty=="" && !mode==""){
+      setErrorMessage("Please choose a difficulty level")
+    }
+    if (!difficulty=="" && mode==""){
+      setErrorMessage ("Please choose a game mode")
+    }
+  }
+ 
 
   React.useEffect(() => {
     setText(getRandomText(difficulty))
@@ -66,8 +98,6 @@ function App(){
     className={clsx("first",
       index+1 <= pressedKey.length && pressedKey[index]==letter && "correct",
       index+1 <= pressedKey.length && pressedKey[index]!=letter  && "wrong"
-      //  (index+1 == pressedKey.length )&&  
-      //  pressedKey[index] == letter ? "correct" : "wrong"
     )}>{letter}</span>
   )
   
@@ -87,14 +117,32 @@ function App(){
 
          <Header 
          setDifficulty = {setDifficulty}
-         timeLeft={timeLeft}
+         countdown={{ minutes, seconds, start, 
+          pause, resume, restart, isRunning }} 
+          
+         stopwatch={{ minutes: swMinutes, seconds: swSeconds, 
+          start: swStart, pause: swPause, reset: swReset, 
+          isRunning: swRunning }}
+
+          setMode = {setMode}
+          mode = {mode}
+          difficulty={difficulty}
+          showButton={showButton}
          />
       </header>
 
-      <div className="text">
+      {!showButton && <div className="text">
         {textElements}
+      </div>}
+
+      <div id="button">
+        {showButton && <button className="start-btn"
+        onClick={startGame}>Start Typing Test</button>}
+        
       </div>
+      <p id="error">{errorMessage}</p>
       
+
       
     </>
   )
