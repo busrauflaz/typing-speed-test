@@ -21,9 +21,11 @@ function App(){
 
   const[wrongTyped, setWrongTyped] = React.useState(0)
 
-  let isGameStarted = false
   
-   
+  const [isGameOver, setIsGameOver] = React.useState(false)
+  
+  const bestWPMRef = React.useRef(localStorage.getItem("bestWPM"))
+  
 
   const { seconds, minutes, hours, isRunning, 
     start, pause, resume, restart, } = 
@@ -40,10 +42,18 @@ function App(){
     const wordsTyped = (pressedKey.length)/5
     let elapsedSeconds = 0
     
-    {mode=="countdown" && (elapsedSeconds = 60-seconds)}
-    {mode=="stopwatch" && (elapsedSeconds= swMinutes*60 + swSeconds)}
+    if (mode=="countdown") {
+      elapsedSeconds = 60-seconds
+    }
+    if(mode=="stopwatch") {
+      elapsedSeconds= swMinutes*60 + swSeconds
+    }
 
-    return Math.round((wordsTyped/elapsedSeconds)*60)
+    if (elapsedSeconds <= 0) return 0
+
+    let newWPM = Math.round((wordsTyped/elapsedSeconds)*60)
+
+    return newWPM
 
   }
 
@@ -67,7 +77,7 @@ function App(){
   function startGame(){
     if(difficulty!="" && mode!=""){
       setShowButton(false)
-      isGameStarted = true
+      
       setErrorMessage("")
 
       if(mode=="countdown"){
@@ -87,6 +97,33 @@ function App(){
       setErrorMessage ("Please choose a game mode")
     }
   }
+
+  React.useEffect(()=> {
+    if( pressedKey.length >= text.length && text.length > 0){
+      pause()
+      swPause()
+      setIsGameOver(true)
+    }
+
+    if(seconds==0 && mode=="countdown"){
+      pause()
+      setIsGameOver(true)
+    }
+
+  }, [pressedKey.length, text.length, seconds])
+    
+  React.useEffect(()=> {
+    if (isGameOver){
+      const finalWPM = calculateWPM()
+      const currentBest = Number(localStorage.getItem("bestWPM"))
+
+      if(finalWPM>currentBest){
+        localStorage.setItem("bestWPM", finalWPM)
+        bestWPMRef.current = finalWPM
+      }
+    }
+  }, [isGameOver])
+  
  
 
   React.useEffect(() => {
@@ -99,7 +136,7 @@ function App(){
     function handleKeyDown(event){
 
       if (event.key.length !== 1) return
-      
+
       console.log("you pressed!", event.key)
 
       setPressedKey(prevKey => {
@@ -135,7 +172,8 @@ function App(){
    
   
 
-  let accuracy = Math.round(((text.length-wrongTyped)/text.length)*100)
+  let accuracy = text.length > 0 ? 
+  Math.round(((text.length-wrongTyped)/text.length)*100) : 100
 
   console.log(wrongTyped)
   
@@ -149,7 +187,7 @@ function App(){
 
              <div id="personal-best">
                 <img src="src/images/icon-personal-best.svg" />
-                <h3>Personal Best: </h3>
+                <h3>Personal Best: {localStorage.getItem("bestWPM")}</h3>
              </div>
          </section>
 

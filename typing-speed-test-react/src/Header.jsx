@@ -21,10 +21,11 @@ function Header(props){
                 "accuracy",
                 props.mode == "countdown" && props.countdown.minutes!=1 && props.countdown.seconds>10 && "yellow",
                 !props.showButton && props.mode == "countdown" && props.countdown.seconds<=10 && props.countdown.minutes!=1 && "red")}>
-                {!props.showButton && props.mode == "countdown" && 
+                
+                { props.mode == "countdown" && 
                 `${props.countdown.minutes}:${props.countdown.seconds}` }
                 
-                {!props.showButton && props.mode == "stopwatch" && 
+                {props.mode == "stopwatch" && 
                 `${props.stopwatch.minutes}:${props.stopwatch.seconds}` }
                 </p>
 
