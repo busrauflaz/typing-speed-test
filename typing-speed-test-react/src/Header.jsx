@@ -1,4 +1,5 @@
 import React from "react"
+import clsx from "clsx"
 
 function Header(props){
   const [active, setActive] = React.useState("")
@@ -8,8 +9,19 @@ function Header(props){
           <section id="game-info">
             <div id="header-bottom-left">
               <p>WPM:</p>
-              <p>Accuracy:</p>
-              <p>Time: {!props.showButton && props.mode == "countdown" && 
+              <p className="accuracy">{props.calculateWPM()}</p>
+
+              <p>Accuracy:</p> <p className={clsx(
+                "accuracy",
+                !props.showButton && props.accuracy==100 && "green",
+                !props.showButton && props.accuracy!=100 && "red"
+              )}> %{props.accuracy}</p>
+
+              <p>Time: </p> <p className={clsx(
+                "accuracy",
+                props.mode == "countdown" && props.countdown.minutes!=1 && props.countdown.seconds>10 && "yellow",
+                !props.showButton && props.mode == "countdown" && props.countdown.seconds<=10 && props.countdown.minutes!=1 && "red")}>
+                {!props.showButton && props.mode == "countdown" && 
                 `${props.countdown.minutes}:${props.countdown.seconds}` }
                 
                 {!props.showButton && props.mode == "stopwatch" && 

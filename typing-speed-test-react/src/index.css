@@ -65,7 +65,7 @@ button{
   background-color: hsl(0, 3%, 12%);
   color: rgb(97, 150, 211);
   text-align: center;
-
+  cursor: pointer;
 }
 
 #mode{
@@ -107,7 +107,7 @@ button{
   color: white; 
   border: none; 
   border-radius: 8px; 
- cursor: pointer;
+  cursor: pointer;
 }
 
 #button{
@@ -132,4 +132,31 @@ button{
   background-color: hsl(0, 3%, 12%);
   color: rgb(97, 150, 211);
   text-align: center;
+}
+
+.accuracy{
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+}
+
+.accuracy.green{
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  color: green;
+}
+
+.accuracy.red{
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  color: red;
+}
+
+.accuracy.yellow{
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  color: yellow;
 }

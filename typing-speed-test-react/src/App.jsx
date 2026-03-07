@@ -19,7 +19,11 @@ function App(){
 
   const [errorMessage, setErrorMessage] = React.useState("")
 
+  const[wrongTyped, setWrongTyped] = React.useState(0)
+
   let isGameStarted = false
+  
+   
 
   const { seconds, minutes, hours, isRunning, 
     start, pause, resume, restart, } = 
@@ -30,6 +34,18 @@ function App(){
         hours: swHours, isRunning: swRunning, start: swStart, 
         pause: swPause, reset: swReset, } = 
         useStopwatch({ autoStart: false });
+
+
+  function calculateWPM(){
+    const wordsTyped = (pressedKey.length)/5
+    let elapsedSeconds = 0
+    
+    {mode=="countdown" && (elapsedSeconds = 60-seconds)}
+    {mode=="stopwatch" && (elapsedSeconds= swMinutes*60 + swSeconds)}
+
+    return Math.round((wordsTyped/elapsedSeconds)*60)
+
+  }
 
   function getRandomText(){
      let index = Math.floor(Math.random() * 10)
@@ -81,18 +97,33 @@ function App(){
 
   React.useEffect(() => {
     function handleKeyDown(event){
+
+      if (event.key.length !== 1) return
+      
       console.log("you pressed!", event.key)
 
-      setPressedKey(prevKey => [...prevKey, event.key])
+      setPressedKey(prevKey => {
+        const currentIndex = prevKey.length
+
+        if(text[currentIndex]!=event.key){
+          setWrongTyped(prev => prev+1)
+        }
+
+        return [...prevKey, event.key]
+      })
+
+      
     }
 
     document.addEventListener("keydown", handleKeyDown)
+
+    
 
     return () =>{
       document.removeEventListener("keydown", handleKeyDown)
     }
 
-  }, [])
+  }, [text, showButton])
 
   const textElements = text.map((letter, index) => <span key={index} 
     className={clsx("first",
@@ -100,6 +131,13 @@ function App(){
       index+1 <= pressedKey.length && pressedKey[index]!=letter  && "wrong"
     )}>{letter}</span>
   )
+
+   
+  
+
+  let accuracy = Math.round(((text.length-wrongTyped)/text.length)*100)
+
+  console.log(wrongTyped)
   
  console.log(text)
 
@@ -128,6 +166,8 @@ function App(){
           mode = {mode}
           difficulty={difficulty}
           showButton={showButton}
+          calculateWPM={calculateWPM}
+          accuracy={accuracy}
          />
       </header>
 
@@ -143,7 +183,7 @@ function App(){
       <p id="error">{errorMessage}</p>
       
 
-      
+      {/*  filter: blur(5px); */}
     </>
   )
 }
