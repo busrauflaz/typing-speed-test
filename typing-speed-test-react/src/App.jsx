@@ -62,17 +62,18 @@ function App(){
 
   }
 
-  function getRandomText(){
+  function getRandomText(selectedDifficulty){
+     if (!selectedDifficulty) return[]
      let index = Math.floor(Math.random() * 10)
      let random_text = []
 
-     {difficulty == "easy" && (
+     {selectedDifficulty == "easy" && (
       random_text =  data.easy[index].text.split(""))
      }
-     { difficulty == "medium" && (
+     {selectedDifficulty == "medium" && (
       random_text =  data.medium[index].text.split(""))
      }
-     { difficulty == "hard" && (
+     { selectedDifficulty == "hard" && (
       random_text = data.hard[index].text.split(""))
      }
 
@@ -80,29 +81,45 @@ function App(){
   }
 
   function restartGame(){
-    setShowButton(true)
-    setDifficulty("")
-    setText([])
+    pause()
+    swPause()
+    swReset(undefined, false)
+
     setIsGameOver(false)
     setIsNewRecord(false)
+    setShowButton(true)
 
+    setDifficulty("")
+    setMode("")
     setPressedKey([])
     setWrongTyped(0)
     setFinalScore(0)
+    setText([])
     setErrorMessage("")
     
+
+    const newTime = new Date()
+    newTime.setSeconds(newTime.getSeconds() + 60)
+    restart(newTime, false)
   }
   
   function startGame(){
     if(difficulty!="" && mode!=""){
+      setPressedKey([])
+      setWrongTyped(0)
+      
       setShowButton(false)
       
       setErrorMessage("")
 
       if(mode=="countdown"){
-        start()
+        const time = new Date()
+        time.setSeconds(time.getSeconds() + 60)
+        restart(time, true)
+
       }
       if(mode=="stopwatch"){
+        swReset()
         swStart()
       }
     }
@@ -118,6 +135,8 @@ function App(){
   }
 
   React.useEffect(()=> {
+    if(isGameOver || text.length==0) return
+
     if( pressedKey.length >= text.length && text.length > 0){
       pause()
       swPause()
@@ -129,7 +148,7 @@ function App(){
       setIsGameOver(true)
     }
 
-  }, [pressedKey.length, text.length, seconds])
+  }, [pressedKey.length, text.length, seconds, isGameOver, mode])
     
   React.useEffect(()=> {
     if (isGameOver){
@@ -158,10 +177,13 @@ function App(){
     function handleKeyDown(event){
 
       if (event.key.length !== 1) return
+      if(showButton || isGameOver) return
 
       console.log("you pressed!", event.key)
 
       setPressedKey(prevKey => {
+        if (prevKey.length >= text.length) return prevKey
+
         const currentIndex = prevKey.length
 
         if(text[currentIndex]!=event.key){
@@ -182,7 +204,7 @@ function App(){
       document.removeEventListener("keydown", handleKeyDown)
     }
 
-  }, [text, showButton])
+  }, [text.length, showButton, isGameOver])
 
   const textElements = text.map((letter, index) => <span key={index} 
     className={clsx("first",
@@ -258,8 +280,8 @@ function App(){
       </div>}
 
       <div id="button">
-        {showButton && !isGameOver && <button className="start-btn"
-        onClick={startGame}>Start Typing Test</button>}
+        {showButton && !isGameOver && (<button className="start-btn"
+        onClick={startGame}>Start Typing Test</button>)}
         
       </div>
       <p id="error">{errorMessage}</p>

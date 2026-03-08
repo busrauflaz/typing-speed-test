@@ -25,7 +25,7 @@ function Header(props){
                 { props.mode == "countdown" && 
                 `${props.countdown.minutes}:${props.countdown.seconds}` }
                 
-                {props.mode == "stopwatch" && 
+                { props.mode == "stopwatch" && 
                 `${props.stopwatch.minutes}:${props.stopwatch.seconds}` }
                 </p>
 
