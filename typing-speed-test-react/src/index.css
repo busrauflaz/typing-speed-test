@@ -52,6 +52,7 @@ button{
   background-color: hsl(0, 3%, 12%);
   color: white;
   text-align: center;
+  
 }
 
 #header-btn:hover{
@@ -99,6 +100,10 @@ button{
   font-size: 1.25em;
 }
 
+.text.blur{
+  filter: blur(7px);
+  user-select: none;
+}
 
 .start-btn { 
   padding: 16px 32px; 
@@ -114,7 +119,12 @@ button{
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  margin-top: 250px;
+  position: absolute;
+  top: 60%;      
+  left: 47%;
+  transform: translate(-50%, -400%);
+  z-index: 10;
+  margin-top: 0;
 }
 
 #error{
@@ -147,6 +157,20 @@ button{
   color: green;
 }
 
+.green{
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  color: green;
+}
+
+.red{
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  color: red;
+}
+
 .accuracy.red{
   margin-top: 14px;
   font-size: 1.3rem;
@@ -159,4 +183,64 @@ button{
   font-size: 1.3rem;
   font-weight: bolder;
   color: yellow;
+}
+
+#high-score{
+  text-align: center;
+  margin-top: 30px;
+}
+
+#sep-boxes{
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  gap: 30px;
+}
+
+.three-box{
+  min-height: 110px;
+  width: 135px;
+  border: 1px solid white;
+  border-radius: 8px;
+}
+
+.three-box p:first-child {
+    margin-bottom: 0; 
+}
+
+#characters{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+ }
+
+#characters p {
+  margin-top: 14px; 
+  font-size: 1.3rem;
+  font-weight: bolder;
+}
+
+#new-btn{
+  height: 60px;
+  width: 200px;
+  font-size: 1em;
+  color: black;
+  background-color: whitesmoke;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+#new-btn img {
+  margin-left: 10px;
+  text-align: center;
+}
+
+.button-container{
+  display: flex;
+  justify-content: center;
 }

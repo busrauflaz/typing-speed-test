@@ -3,6 +3,9 @@ import Header from "./Header.jsx"
 import data from "./data.json"
 import clsx from "clsx"
 import { useStopwatch, useTimer } from "react-timer-hook"
+import New_Personal_Best from "./New_Personal_Best.jsx"
+import Results from "./Results.jsx"
+import First_Test from "./First_Test.jsx"
 
 function App(){
   const [difficulty, setDifficulty] = React.useState("")
@@ -25,7 +28,9 @@ function App(){
   const [isGameOver, setIsGameOver] = React.useState(false)
   
   const bestWPMRef = React.useRef(localStorage.getItem("bestWPM"))
-  
+
+  const [finalScore, setFinalScore] = React.useState(0)
+  const [isNewRecord, setIsNewRecord] = React.useState(false)
 
   const { seconds, minutes, hours, isRunning, 
     start, pause, resume, restart, } = 
@@ -73,6 +78,20 @@ function App(){
 
      return random_text
   }
+
+  function restartGame(){
+    setShowButton(true)
+    setDifficulty("")
+    setText([])
+    setIsGameOver(false)
+    setIsNewRecord(false)
+
+    setPressedKey([])
+    setWrongTyped(0)
+    setFinalScore(0)
+    setErrorMessage("")
+    
+  }
   
   function startGame(){
     if(difficulty!="" && mode!=""){
@@ -114,14 +133,17 @@ function App(){
     
   React.useEffect(()=> {
     if (isGameOver){
-      const finalWPM = calculateWPM()
+      const wpm = calculateWPM()
       const currentBest = Number(localStorage.getItem("bestWPM"))
+      setFinalScore(wpm)
 
-      if(finalWPM>currentBest){
-        localStorage.setItem("bestWPM", finalWPM)
-        bestWPMRef.current = finalWPM
+      if(wpm>currentBest){
+        localStorage.setItem("bestWPM", wpm)
+        bestWPMRef.current = wpm
+        setIsNewRecord(true)
       }
     }
+
   }, [isGameOver])
   
  
@@ -187,7 +209,7 @@ function App(){
 
              <div id="personal-best">
                 <img src="src/images/icon-personal-best.svg" />
-                <h3>Personal Best: {localStorage.getItem("bestWPM")}</h3>
+                <h3>Personal Best: {localStorage.getItem("bestWPM")} WPM</h3>
              </div>
          </section>
 
@@ -206,15 +228,37 @@ function App(){
           showButton={showButton}
           calculateWPM={calculateWPM}
           accuracy={accuracy}
+          restartGame={restartGame}
          />
       </header>
 
-      {!showButton && <div className="text">
+      {isGameOver &&  isNewRecord &&
+        <New_Personal_Best 
+          finalScore ={finalScore}
+          accuracy={accuracy}
+          wrongTyped={wrongTyped}
+          text={text}
+          restartGame={restartGame}
+        />}
+
+       {isGameOver &&  !isNewRecord && !showButton &&
+        <Results
+          finalScore ={finalScore}
+          accuracy={accuracy}
+          wrongTyped={wrongTyped}
+          text={text}
+          restartGame={restartGame}
+        />}
+
+      {!isGameOver && <div className={clsx("text",
+        showButton && "blur",
+        !showButton && ""
+      )}>
         {textElements}
       </div>}
 
       <div id="button">
-        {showButton && <button className="start-btn"
+        {showButton && !isGameOver && <button className="start-btn"
         onClick={startGame}>Start Typing Test</button>}
         
       </div>
