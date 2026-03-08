@@ -128,7 +128,15 @@ button{
 }
 
 #error{
+  position: absolute;
   text-align: center;
+  top: 60%;      
+  left: 47%;
+  transform: translate(-50%, -400%);
+  z-index: 10;
+  margin: 0;
+  font-style: italic;
+  font-size: 1.1rem;
 }
 
 #header-btn.active{

@@ -2,8 +2,6 @@ import React from "react"
 import clsx from "clsx"
 
 function Header(props){
-  const [active, setActive] = React.useState("")
-
     return(
         <>
           <section id="game-info">
@@ -19,14 +17,16 @@ function Header(props){
 
               <p>Time: </p> <p className={clsx(
                 "accuracy",
-                props.mode == "countdown" && props.countdown.minutes!=1 && props.countdown.seconds>10 && "yellow",
-                !props.showButton && props.mode == "countdown" && props.countdown.seconds<=10 && props.countdown.minutes!=1 && "red")}>
+                props.mode === "countdown" && props.countdown.minutes!==1 && props.countdown.seconds>10 && "yellow",
+                !props.showButton && props.mode === "countdown" && props.countdown.seconds<=10 && props.countdown.minutes!==1 && "red")}>
                 
-                { props.mode == "countdown" && 
-                `${props.countdown.minutes}:${props.countdown.seconds}` }
+                { props.mode === "countdown" ?
+                `${props.countdown.minutes}:${props.countdown.seconds.toString().padStart(2, '0')}` :
                 
-                { props.mode == "stopwatch" && 
-                `${props.stopwatch.minutes}:${props.stopwatch.seconds}` }
+                 props.mode == "stopwatch" ?
+                `${props.stopwatch.minutes}:${props.stopwatch.seconds.toString().padStart(2, '0')}` :
+                "0:00"
+                 }
                 </p>
 
             </div>

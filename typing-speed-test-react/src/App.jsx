@@ -16,7 +16,7 @@ function App(){
 
   const [mode, setMode] = React.useState("")
 
-  const expiryTimestamp = new Date(); expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60)
+  // const expiryTimestamp = new Date(); expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60)
 
   const [showButton, setShowButton] = React.useState(true)
 
@@ -32,10 +32,17 @@ function App(){
   const [finalScore, setFinalScore] = React.useState(0)
   const [isNewRecord, setIsNewRecord] = React.useState(false)
 
+  const [isFirstGame, setIsFirstGame] = React.useState(() => {
+    const bestWPM = localStorage.getItem("bestWPM")
+    console.log("Initial isFirstGame check:", { bestWPM, isFirstGame: bestWPM === null })
+    return bestWPM===null
+  })
+
   const { seconds, minutes, hours, isRunning, 
     start, pause, resume, restart, } = 
-    useTimer({ expiryTimestamp, autoStart: false, onExpire: () => 
-      console.log("Countdown finished!"), })
+    useTimer({ expiryTimestamp : new Date(), autoStart: false, onExpire: () => {
+      console.log("Countdown finished!")
+       }})
   
       const { seconds: swSeconds, minutes: swMinutes, 
         hours: swHours, isRunning: swRunning, start: swStart, 
@@ -44,6 +51,8 @@ function App(){
 
 
   function calculateWPM(){
+    if(pressedKey.length === 0) return 0
+
     const wordsTyped = (pressedKey.length)/5
     let elapsedSeconds = 0
     
@@ -63,7 +72,15 @@ function App(){
   }
 
   function getRandomText(selectedDifficulty){
-     if (!selectedDifficulty) return[]
+     if (!selectedDifficulty || !data[selectedDifficulty] ) return[]
+
+     let index = Math.floor(Math.random()*10)
+
+     const textString = data[selectedDifficulty][index].text;
+     return textString.split("");
+
+
+     /*
      let index = Math.floor(Math.random() * 10)
      let random_text = []
 
@@ -78,6 +95,7 @@ function App(){
      }
 
      return random_text
+     */
   }
 
   function restartGame(){
@@ -88,6 +106,7 @@ function App(){
     setIsGameOver(false)
     setIsNewRecord(false)
     setShowButton(true)
+    setIsFirstGame(false)
 
     setDifficulty("")
     setMode("")
@@ -104,13 +123,18 @@ function App(){
   }
   
   function startGame(){
-    if(difficulty!="" && mode!=""){
+    /* if(difficulty!="" && mode!=""){ */
+    if (difficulty && mode){
+      console.log("Game starting with:", { difficulty, mode })
+
       setPressedKey([])
       setWrongTyped(0)
       
       setShowButton(false)
       
       setErrorMessage("")
+      // const randomText = getRandomText(difficulty)
+      // setText(randomText)
 
       if(mode=="countdown"){
         const time = new Date()
@@ -123,6 +147,7 @@ function App(){
         swStart()
       }
     }
+
     if (difficulty=="" && mode==""){
       setErrorMessage("Please choose a difficulty level and a game mode")
     }
@@ -134,21 +159,40 @@ function App(){
     }
   }
 
+  React.useEffect(() => {
+  if(text.length > 0 && !showButton && mode === "stopwatch"){
+    
+  }
+  }, [text.length, showButton, mode])
+
   React.useEffect(()=> {
-    if(isGameOver || text.length==0) return
+    console.log("Effect triggered:", {
+    isGameOver,
+    textLength: text.length,
+    showButton,
+    pressedKeyLength: pressedKey.length,
+    seconds,
+    mode,
+    isRunning,
+    swRunning
+    })
+
+    if(isGameOver || text.length==0 || showButton) return
 
     if( pressedKey.length >= text.length && text.length > 0){
       pause()
       swPause()
       setIsGameOver(true)
+      return
     }
 
-    if(seconds==0 && mode=="countdown"){
+    if(seconds===0 && mode==="countdown" && !isRunning){
       pause()
       setIsGameOver(true)
+      return
     }
 
-  }, [pressedKey.length, text.length, seconds, isGameOver, mode])
+  }, [pressedKey.length, text.length, seconds, isGameOver, mode, showButton, isRunning])
     
   React.useEffect(()=> {
     if (isGameOver){
@@ -161,17 +205,32 @@ function App(){
         bestWPMRef.current = wpm
         setIsNewRecord(true)
       }
+      
     }
 
   }, [isGameOver])
+
+  React.useEffect(() => {
+    if (isGameOver && !isFirstGame){return}
+
+    if (isGameOver && isFirstGame) {
+      const timer = setTimeout(() => {
+      //setIsFirstGame(false)
+      }, 100)
+    return () => clearTimeout(timer)
+  }
+}, [isGameOver, isFirstGame])
+  
   
  
 
   React.useEffect(() => {
-    setText(getRandomText(difficulty))
-    setPressedKey([])
-    
-  }, [difficulty])
+    if(difficulty){
+      setText(getRandomText(difficulty))
+      setPressedKey([])
+    }
+
+  }, [difficulty])  
 
   React.useEffect(() => {
     function handleKeyDown(event){
@@ -206,7 +265,7 @@ function App(){
 
   }, [text.length, showButton, isGameOver])
 
-  const textElements = text.map((letter, index) => <span key={index} 
+  const textElements =  text.map((letter, index) => <span key={index} 
     className={clsx("first",
       index+1 <= pressedKey.length && pressedKey[index]==letter && "correct",
       index+1 <= pressedKey.length && pressedKey[index]!=letter  && "wrong"
@@ -225,6 +284,14 @@ function App(){
 
   return(
     <>
+      {console.log("Render check:", { 
+      isGameOver, 
+      showButton, 
+      isFirstGame,
+      shouldShowFirst: isGameOver && !showButton && isFirstGame,
+      shouldShowNew: isGameOver && isNewRecord && !isFirstGame,
+      shouldShowResults: isGameOver && !isNewRecord && !showButton && !isFirstGame
+    })}
        <header>
          <section id="top-header">
              <img src="src/images/logo-large.svg" />
@@ -254,7 +321,7 @@ function App(){
          />
       </header>
 
-      {isGameOver &&  isNewRecord &&
+      {isGameOver && !isFirstGame && isNewRecord &&
         <New_Personal_Best 
           finalScore ={finalScore}
           accuracy={accuracy}
@@ -263,8 +330,16 @@ function App(){
           restartGame={restartGame}
         />}
 
-       {isGameOver &&  !isNewRecord && !showButton &&
+       {isGameOver &&  !isFirstGame && !isNewRecord && !showButton && 
         <Results
+          finalScore ={finalScore}
+          accuracy={accuracy}
+          wrongTyped={wrongTyped}
+          text={text}
+          restartGame={restartGame}
+        />}
+
+        {isGameOver && isFirstGame && !showButton && <First_Test 
           finalScore ={finalScore}
           accuracy={accuracy}
           wrongTyped={wrongTyped}
