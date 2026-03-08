@@ -45,10 +45,6 @@ function First_Test(props){
 
           </div>
            
-
-           
-
-           <img src="/src/images/pattern-confetti.svg" />
         </section>
         
     )

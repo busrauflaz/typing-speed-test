@@ -16,8 +16,6 @@ function App(){
 
   const [mode, setMode] = React.useState("")
 
-  // const expiryTimestamp = new Date(); expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60)
-
   const [showButton, setShowButton] = React.useState(true)
 
   const [errorMessage, setErrorMessage] = React.useState("")
@@ -78,24 +76,6 @@ function App(){
 
      const textString = data[selectedDifficulty][index].text;
      return textString.split("");
-
-
-     /*
-     let index = Math.floor(Math.random() * 10)
-     let random_text = []
-
-     {selectedDifficulty == "easy" && (
-      random_text =  data.easy[index].text.split(""))
-     }
-     {selectedDifficulty == "medium" && (
-      random_text =  data.medium[index].text.split(""))
-     }
-     { selectedDifficulty == "hard" && (
-      random_text = data.hard[index].text.split(""))
-     }
-
-     return random_text
-     */
   }
 
   function restartGame(){
@@ -123,18 +103,12 @@ function App(){
   }
   
   function startGame(){
-    /* if(difficulty!="" && mode!=""){ */
     if (difficulty && mode){
-      console.log("Game starting with:", { difficulty, mode })
 
       setPressedKey([])
       setWrongTyped(0)
-      
       setShowButton(false)
-      
       setErrorMessage("")
-      // const randomText = getRandomText(difficulty)
-      // setText(randomText)
 
       if(mode=="countdown"){
         const time = new Date()
@@ -166,17 +140,6 @@ function App(){
   }, [text.length, showButton, mode])
 
   React.useEffect(()=> {
-    console.log("Effect triggered:", {
-    isGameOver,
-    textLength: text.length,
-    showButton,
-    pressedKeyLength: pressedKey.length,
-    seconds,
-    mode,
-    isRunning,
-    swRunning
-    })
-
     if(isGameOver || text.length==0 || showButton) return
 
     if( pressedKey.length >= text.length && text.length > 0){
@@ -221,8 +184,6 @@ function App(){
   }
 }, [isGameOver, isFirstGame])
   
-  
- 
 
   React.useEffect(() => {
     if(difficulty){
@@ -251,13 +212,9 @@ function App(){
 
         return [...prevKey, event.key]
       })
-
-      
     }
 
     document.addEventListener("keydown", handleKeyDown)
-
-    
 
     return () =>{
       document.removeEventListener("keydown", handleKeyDown)
@@ -272,26 +229,11 @@ function App(){
     )}>{letter}</span>
   )
 
-   
-  
-
   let accuracy = text.length > 0 ? 
   Math.round(((text.length-wrongTyped)/text.length)*100) : 100
 
-  console.log(wrongTyped)
-  
- console.log(text)
-
   return(
     <>
-      {console.log("Render check:", { 
-      isGameOver, 
-      showButton, 
-      isFirstGame,
-      shouldShowFirst: isGameOver && !showButton && isFirstGame,
-      shouldShowNew: isGameOver && isNewRecord && !isFirstGame,
-      shouldShowResults: isGameOver && !isNewRecord && !showButton && !isFirstGame
-    })}
        <header>
          <section id="top-header">
              <img src="src/images/logo-large.svg" />
@@ -360,9 +302,6 @@ function App(){
         
       </div>
       <p id="error">{errorMessage}</p>
-      
-
-      {/*  filter: blur(5px); */}
     </>
   )
 }
